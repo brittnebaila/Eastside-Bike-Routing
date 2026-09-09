@@ -58,3 +58,18 @@ the yellow highlighting without changing the original Trails layer.
 
 --------------------------------------
 
+## QGIS Categorized Symbology
+
+I categorized the Trails layer using the `SystemName` attribute.
+
+QGIS identified:
+- 13 unique `SystemName` values
+- 71 features with a missing `SystemName` value
+
+Categorized symbology changes how features are displayed based on their
+attribute values without modifying the underlying data.
+
+### Data Quality Observation
+Some trail features contain geometry but are missing a `SystemName`.
+This is important because missing attribute values may need to be handled
+when the data is later used for analysis or routing.
