@@ -110,3 +110,87 @@ features, 98 filtered features, and 0 selected features.
 - Filtering does not delete features from the original dataset.
 - The same expression can be used for different purposes depending on the
   QGIS tool being used.
+
+  --------------------------------------
+
+## Redmond GIS Data Discovery
+
+### Dataset 1: Trails
+
+**Source:** City of Redmond GIS
+
+**Geometry:** Line
+
+**Potentially Useful Attributes:**
+- `d_TrailNam` — trail name
+- `d_TrailCla` — trail classification
+- `d_SurfaceT` — surface type
+- `d_TrailSta` — trail status
+- `d_Ped` — pedestrian-related attribute
+- `d_Bicycle` — bicycle-related attribute
+- `d_Owner` — trail owner
+- `d_Manager` — trail manager
+
+### Initial Data Exploration
+
+`d_SurfaceT` contains five unique coded values:
+- PVD
+- SFT
+- STR
+- UNK
+- WTR
+
+`d_Bicycle` contains three unique coded values:
+- 0
+- 1
+- 9
+
+The meanings of these codes still need to be verified using City of Redmond
+metadata or domain documentation before they are used in analysis.
+
+### Routing Value
+
+This dataset appears useful for bicycle routing because it contains trail
+geometry along with attributes describing surface type, trail classification,
+status, and bicycle use. These attributes could eventually help distinguish
+between route segments rather than treating every trail as equally suitable
+for cycling.
+
+### Dataset 2: Street Centerline
+
+**Source:** City of Redmond GIS
+
+**Geometry:** Line
+
+**Potentially Useful Attributes:**
+- `StreetName` — street name
+- `FromStreet` / `ToStreet` — segment location/connectivity information
+- `StreetWidt` — street width
+- `d_Classifi` — street classification
+- `d_Status` — street status
+- `surface` — surface-related attribute
+- `MaxSpeedLi` — maximum speed limit
+
+### Initial Data Exploration
+
+`MaxSpeedLi` contains six unique values:
+
+- 0
+- 25
+- 30
+- 35
+- 40
+- 45
+
+The values from 25–45 appear to represent posted speed limits based on the
+field name. The meaning of `0` should be verified before the field is used
+in analysis.
+
+### Routing Value
+
+The Street Centerline dataset appears useful because it provides the street
+network along with characteristics such as street classification, width,
+surface, and maximum speed limit.
+
+These attributes could eventually be combined with trail and elevation data
+to evaluate bicycle route segments based on more than distance alone.
