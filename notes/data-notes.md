@@ -194,3 +194,79 @@ surface, and maximum speed limit.
 
 These attributes could eventually be combined with trail and elevation data
 to evaluate bicycle route segments based on more than distance alone.
+
+--------------------------------------
+
+## Redmond Elevation and Slope Analysis
+
+### Elevation Data
+
+I downloaded two USGS 3DEP 1-meter DEM tiles covering my initial Redmond
+study area.
+
+The DEM data uses:
+
+- CRS: EPSG:26910 — NAD83 / UTM Zone 10N
+- Horizontal units: meters
+- Pixel resolution: 1 meter
+- Data type: Float32
+
+One inspected DEM tile had elevation values ranging from approximately
+5 meters to 168 meters.
+
+### Combining Elevation Tiles
+
+I used QGIS Build Virtual Raster to combine the two DEM tiles into:
+
+`redmond-dem.vrt`
+
+A virtual raster allows QGIS to work with multiple source raster files as
+one elevation surface without creating another full copy of the original
+data.
+
+### Slope Analysis
+
+I used the combined DEM to calculate a new raster:
+
+`redmond-slope-percent.tif`
+
+Slope was calculated as percent grade rather than degrees because percent
+grade is more directly useful for bicycle route analysis.
+
+The resulting slope raster had:
+
+- Minimum slope: 0%
+- Maximum slope: approximately 80.68%
+- Mean slope: approximately 6.17%
+
+The very high maximum values represent steep terrain or localized terrain
+features and should not be interpreted as the grade of a bicycle route.
+
+### Slope Visualization
+
+I experimented with Singleband Pseudocolor symbology and focused the display
+on slopes from 0–15%.
+
+I created exploratory slope classes around:
+
+- 0–3%
+- 3–5%
+- 5–8%
+- 8–12%
+- 12–15%
+
+The 1-meter slope raster is extremely detailed and visually noisy. This
+demonstrated that terrain slope alone is not the same as bicycle route grade.
+
+### What I Learned
+
+A DEM represents elevation as raster cells, while the Redmond trails,
+streets, and bicycle facilities are vector features.
+
+Calculating slope from the DEM describes the terrain across the entire study
+area. For bicycle routing, the next step is to connect elevation information
+to actual road and trail segments.
+
+This will eventually allow route segments to include characteristics such as
+surface type, bicycle facility type, speed limit, average grade, and maximum
+grade.
