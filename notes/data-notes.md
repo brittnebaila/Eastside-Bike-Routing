@@ -270,3 +270,21 @@ to actual road and trail segments.
 This will eventually allow route segments to include characteristics such as
 surface type, bicycle facility type, speed limit, average grade, and maximum
 grade.
+
+### NE 24th Street elevation profile
+
+Tested an approximately 1.08 km section of NE 24th Street using
+the Redmond DEM and QGIS Profile Tool.
+
+- Start elevation: ~43 m
+- Maximum elevation: ~57 m
+- End elevation: ~42–43 m
+- Approximate elevation gain to crest: 14 m
+- Approximate distance to crest: 730 m
+- Average climbing grade to crest: ~1.9%
+
+Observation:
+Using only start and end elevation would make this segment appear
+nearly flat. The elevation profile reveals a climb followed by a
+descent. Bicycle routing will need to account for elevation changes
+within routes and direction of travel.
