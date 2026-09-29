@@ -288,3 +288,219 @@ Using only start and end elevation would make this segment appear
 nearly flat. The elevation profile reveals a climb followed by a
 descent. Bicycle routing will need to account for elevation changes
 within routes and direction of travel.
+
+--------------------------------------
+
+## NE 24th Routing Segment
+
+**Source layer:** Redmond Centerline  
+**Street:** NE 24th ST  
+**Segment:** 185th PL NE → 186th AVE NE
+
+### Useful Existing Attributes
+
+- Street name
+- Street width: 40
+- Road classification: coded value 2
+- Maximum speed limit: 30
+- Surface: coded value 1
+- Ownership: RED
+- Status: ACT
+
+### Attributes I Would Need to Derive
+
+- `length_m`
+- `elevation_gain_m`
+- `grade_percent`
+
+### Attributes That May Come From Another Dataset
+
+- Bicycle facility type
+
+### Questions About the Source Data
+
+- What does surface code `1` represent?
+- What does classification code `2` represent?
+- What units are used for `StreetWidth`?
+
+### Source Attribute Definitions
+
+- `Classification = 2` → Minor Arterial
+- `MaxSpeedLimit = 30` → 30 mph
+- `CalcLength = 322.4` → segment length in feet
+- QGIS measurement → approximately 98 m
+- `AssetID = Cntl1681` → unique identifier for this centerline segment
+- `surface = 1` → definition still needs verification
+- `StreetWidth = 40` → likely feet, but still needs verification
+
+### Length Verification
+
+The selected NE 24th Street segment runs from 185th PL NE to
+186th AVE NE.
+
+Redmond's `CalcLength` value is 322.4 feet.
+
+A manual QGIS measurement of the same segment was approximately
+98 meters.
+
+322.4 ft × 0.3048 ≈ 98.27 m
+
+This confirms that `CalcLength` represents the segment length in feet.
+
+### Derived Segment Length
+
+Created a new field in the processed Redmond routing dataset:
+
+`length_m`
+
+The source dataset provides segment length in feet through `CalcLength`.
+
+Converted the values to meters using:
+
+`length_m = CalcLength × 0.3048`
+
+For the selected NE 24th Street segment:
+
+- AssetID: `Cntl1681`
+- Source length: 322.4 ft
+- Derived length: ~98.27 m
+
+The calculation was applied to the full Redmond Centerline dataset rather
+than manually calculating individual features.
+
+This demonstrates a basic GIS data-processing workflow:
+
+source attribute → transformation → derived routing attribute
+
+### Derived Segment Length
+
+Created a processed working copy of the Redmond Centerline dataset rather
+than modifying the original municipal data.
+
+Added a new field:
+
+`length_m`
+
+Calculated metric segment length using:
+
+`length_m = CalcLength × 0.3048`
+
+For the NE 24th Street test segment:
+
+- AssetID: `Cntl1681`
+- Source length: 322.4 ft
+- Derived length: ~98.27 m
+
+The calculation was applied to the full Redmond Centerline dataset,
+demonstrating how a single transformation can create derived attributes
+across thousands of features.
+
+
+### Testing Elevation Sampling
+
+Selected three connected street segments near NE 24th Street to test an
+elevation-to-street workflow before applying it to the full network.
+
+Used **Extract Specific Vertices** to extract the first and last vertices
+of the selected street segments.
+
+For three street segments, QGIS created six endpoint records. Some points
+overlapped because adjacent street segments share endpoints.
+
+Used **Sample Raster Values** with the Redmond DEM to extract elevation
+values at the street-segment endpoints.
+
+This transferred elevation information from the raster DEM into attributes
+associated with vector point features.
+
+
+### Joining Elevation to Street Segments
+
+Used `AssetID` as the common identifier to join sampled endpoint elevations
+back to their original street segments.
+
+Created start and end elevation attributes for the three test segments.
+
+Example:
+
+`Cntl1681`
+
+- Length: ~98.27 m
+- Start elevation: ~54.75 m
+- End elevation: ~57.00 m
+- Elevation change: ~+2.25 m
+
+
+### Calculating Street Grade
+
+Created two derived attributes:
+
+`elev_change_m`
+
+Calculated using:
+
+`end elevation - start elevation`
+
+`grade_pct`
+
+Calculated using:
+
+`(elev_change_m / length_m) × 100`
+
+Results for the three test segments:
+
+| AssetID | Length (m) | Start Elev. (m) | End Elev. (m) | Grade |
+|---|---:|---:|---:|---:|
+| Cntl254 | 65.62 | 53.88 | 47.57 | -9.62% |
+| Cntl1680 | 100.71 | 51.48 | 54.75 | +3.25% |
+| Cntl1681 | 98.27 | 54.75 | 57.00 | +2.29% |
+
+Positive and negative grades represent the direction in which the line
+geometry is stored. A segment that is uphill in one travel direction is
+downhill in the opposite direction.
+
+This will be important when the street network is eventually converted
+into routing edges.
+
+
+### Processed Routing Layer
+
+Saved the completed test workflow as a permanent GeoPackage layer:
+
+`redmond_routing_with_elevation`
+
+The analytical layer was saved using:
+
+`EPSG:26910 — NAD83 / UTM zone 10N`
+
+This provides a meter-based projected coordinate system appropriate for
+local spatial analysis.
+
+The current processed routing dataset contains:
+
+- Street geometry
+- Municipal street attributes
+- `length_m`
+- Start elevation
+- End elevation
+- Elevation change
+- Grade percentage
+
+Elevation and grade have currently been calculated for three test segments.
+The remaining street segments contain NULL elevation values.
+
+The next step will be to scale the tested elevation workflow across the
+full Redmond street network.
+
+
+### Key GIS Concepts Practiced
+
+- Preserving raw source data and creating processed working datasets
+- Converting source measurements into application-ready units
+- Extracting vertices from line geometry
+- Sampling raster values at vector locations
+- Joining spatially derived information using feature identifiers
+- Calculating derived terrain attributes
+- Understanding directional grade
+- Testing a geospatial workflow on a small subset before scaling it
+- Using an appropriate projected CRS for local spatial analysis
