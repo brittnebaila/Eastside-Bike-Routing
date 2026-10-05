@@ -25,6 +25,16 @@ This project explores factors such as:
 - Route comfort and accessibility
 - Cyclist preferences and experience
 
+## Analysis Highlights
+
+Early spatial analysis on Redmond's bicycle network, built from municipal open data and USGS 1-meter elevation data:
+
+![Slope classification of Redmond bicycle network segments](notes/screenshots/redmond-slope-classification.png)
+*Slope classification of bicycle network segments — the terrain input behind cyclist-centered route scoring.*
+
+![Elevation profile along the NE 24th corridor](notes/screenshots/ne24th-elevation-profile.png)
+*Elevation profile for a sample corridor, showing what a "bikeable" route actually feels like to ride.*
+
 ## Planned Development
 
 ### GIS & Spatial Analysis
@@ -33,9 +43,10 @@ This project explores factors such as:
 - Develop a cyclist-centered route scoring approach
 
 ### Web GIS
-- Build an interactive map with Leaflet
+- Build an interactive prototype map, starting with Leaflet
 - Display route characteristics and elevation information
 - Compare alternative routes visually
+- Level up: rebuild the terrain view with the ArcGIS Maps SDK for JavaScript (SceneView) for 3D slope and elevation visualization
 
 ### Spatial Data & Routing
 - Introduce PostgreSQL/PostGIS
