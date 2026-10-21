@@ -504,3 +504,96 @@ full Redmond street network.
 - Understanding directional grade
 - Testing a geospatial workflow on a small subset before scaling it
 - Using an appropriate projected CRS for local spatial analysis
+
+--------------------------------------
+## October 21, 2026 — First Working Leaflet Grade Visualization
+
+### Goal
+Move the Redmond street-grade analysis from QGIS into a browser-based web map and use the calculated grade values to control street symbology.
+
+### Preparing the Web Layer
+The existing `redmond-21-segment-grades` layer contained the correct grade attributes but used point geometry because it was created from the sampled start endpoints.
+
+To create a web-ready street layer:
+
+- Joined the grade results back to `redmond_routing_with_elevation`
+- Used `AssetID` as the join field
+- Preserved the original street line geometry
+- Copied the calculated grade field into the joined layer
+- Limited the output to the 21 analyzed street segments
+- Exported the resulting line layer to WGS84 / EPSG:4326 for web mapping
+- Saved the working GeoJSON as `web/test-lines.geojson`
+
+This produced 21 street line features containing the calculated grade data.
+
+### Leaflet Prototype
+Created the first working Leaflet map in `web/index.html`.
+
+The prototype currently:
+
+- Loads an OpenStreetMap basemap
+- Fetches `test-lines.geojson`
+- Creates a Leaflet GeoJSON layer
+- Automatically zooms to the analyzed street segments
+- Reads the calculated grade value for each street
+- Styles each segment based on its grade
+
+### Grade Visualization
+The prototype currently uses absolute grade so that color represents steepness regardless of the stored direction of the street geometry.
+
+Current prototype categories:
+
+- Green: less than 3%
+- Yellow: 3% to less than 6%
+- Red: 6% or greater
+
+These categories are being used for visualization and exploration only. They are not intended to represent accessibility, engineering, or safety standards.
+
+### Debugging / Important Finding
+The first web map successfully displayed the street geometry, but every segment appeared green.
+
+Browser debugging showed that JavaScript was receiving `null` when requesting:
+
+`grade_pct`
+
+The exported/joined GeoJSON actually stored the calculated values under:
+
+`grade_pct_2`
+
+Because JavaScript converts `null` to `0` when passed through `Math.abs()`, all segments were incorrectly classified as less than 3%.
+
+Updating the Leaflet code to read `grade_pct_2` fixed the issue.
+
+The browser now correctly displays green, yellow, and red street segments according to the calculated grade values.
+
+### Current Data Pipeline
+The working pipeline is now:
+
+Municipal street GIS data  
+→ DEM elevation data  
+→ QGIS endpoint sampling  
+→ elevation change  
+→ street grade calculation  
+→ join results to line geometry  
+→ GeoJSON export  
+→ JavaScript / Leaflet  
+→ interactive browser visualization
+
+### Key Learning
+This was the first point in the project where the GIS analysis directly controlled the behavior of the web application.
+
+The colors displayed in Leaflet are not manually assigned. JavaScript reads the grade attribute from each geographic feature and determines its style dynamically.
+
+The 21-segment dataset is serving as a small test area to validate the full GIS-to-web workflow before scaling the analysis to a larger street network.
+
+### Next Steps
+- Commit the working Leaflet grade visualization
+- Add clickable street segments with grade and length information
+- Add a grade legend
+- Bring Redmond bicycle-facility data into the web map
+- Improve grade analysis by sampling elevation along street segments rather than relying only on endpoints
+- Scale beyond the 21-segment test dataset
+- Introduce PostGIS and spatial SQL
+- Begin route comparison logic
+- Later rebuild the terrain experience using ArcGIS Maps SDK for JavaScript SceneView
+- Finish with UI and portfolio-case-study polish

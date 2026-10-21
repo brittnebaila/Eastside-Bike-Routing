@@ -143,3 +143,57 @@ At the end of six weeks, the project should demonstrate a simple but meaningful 
 Can public GIS data help a cyclist choose a route that may be slightly longer but is flatter, safer, better surfaced, or more comfortable to ride?
 
 The prototype does not need to replace a full navigation application. Its purpose is to demonstrate the combination of GIS analysis, spatial data, software engineering, and user-centered problem solving in a real-world transportation project.
+
+--------------------------------------
+## Updated Roadmap — October 21, 2026
+
+### Phase 1 — GIS Foundations & Grade Analysis ✅
+- Import and explore Redmond municipal GIS data
+- Work with DEM elevation data
+- Calculate slope and elevation
+- Build initial 3-segment grade workflow
+- Scale test analysis to 21 connected street segments
+- Join calculated grades back to street line geometry
+
+### Phase 2 — Leaflet Web GIS Prototype ← CURRENT
+- Export analyzed street lines to GeoJSON
+- Display street network in Leaflet
+- Style street segments dynamically by calculated grade
+- Add clickable street information
+- Add grade legend
+- Add bicycle-facility data
+
+### Phase 3 — Improve & Scale Elevation Analysis
+- Sample elevation along street geometry rather than endpoints only
+- Calculate more useful terrain metrics
+- Validate improved method on 21-segment test area
+- Automate processing for the larger Redmond street network
+- Produce a city-scale processed street dataset
+
+### Phase 4 — Spatial Database
+- Learn PostGIS fundamentals
+- Import processed street network
+- Practice spatial SQL
+- Store terrain and bicycle-infrastructure attributes
+- Query geographic features for the web application
+
+### Phase 5 — Route Comparison
+- Select origins and destinations
+- Explore routing/network concepts
+- Compare routes using distance, terrain, and bicycle infrastructure
+- Display route summaries and elevation information
+- Avoid unsupported safety/accessibility conclusions
+
+### Phase 6 — 3D Terrain Experience
+- Begin ArcGIS Maps SDK for JavaScript
+- Build SceneView terrain visualization
+- Display routes over 3D elevation
+- Explore slope/elevation visualization
+- Add useful terrain interactions and route information
+
+### Phase 7 — Final UI & Portfolio Case Study
+- Refine visual hierarchy and interaction design
+- Improve accessibility and responsive behavior
+- Document architecture and methodology
+- Create final screenshots/demo
+- Finish README and portfolio case study

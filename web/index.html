@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Eastside Bike Routing</title>
+
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css"
+  >
+
+  <style>
+    #map {
+      height: 100vh;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="map"></div>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <script>
+    const map = L.map("map").setView([47.67, -122.12], 13);
+
+    L.tileLayer(
+      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      {
+        attribution: "&copy; OpenStreetMap contributors"
+      }
+        ).addTo(map);
+        fetch("test-lines.geojson")
+            .then(response => response.json())
+            .then(data => {
+                console.log(data.features.map(feature => feature.properties.grade_pct_2));
+
+                const streets = L.geoJSON(data, {
+                    style: feature => {
+                        const grade = Math.abs(feature.properties.grade_pct_2);
+
+                        let color;
+
+                        if (grade < 3) {
+                            color = "#4CAF50";
+                        } else if (grade < 6) {
+                            color = "#FFC107";
+                        } else {
+                            color = "#E53935";
+                        }
+
+                        return {
+                            color: color,
+                            weight: 7,
+                            opacity: 0.85
+                        };
+                    }
+                }).addTo(map);
+
+                map.fitBounds(streets.getBounds());
+            });
+    </script>
+
+</body>
+</html>

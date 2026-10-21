@@ -2,3 +2,4 @@ data/raw/
 .DS_Store
 data/processed/elevation/*.tif
 data/processed/elevation/redmond-slope-percent.tif.aux.xml
+*.qmd
