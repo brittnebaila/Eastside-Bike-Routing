@@ -597,3 +597,31 @@ The 21-segment dataset is serving as a small test area to validate the full GIS-
 - Begin route comparison logic
 - Later rebuild the terrain experience using ArcGIS Maps SDK for JavaScript SceneView
 - Finish with UI and portfolio-case-study polish
+
+--------------------------------------
+
+--------------------------------------
+
+## October 29, 2026 — Leaflet Interactive Map Improvements
+
+### Completed
+- Added clickable popups to the 21 analyzed Redmond street segments using Leaflet's `onEachFeature` and `bindPopup()`.
+- Popups display street grade percentage (`grade_pct_2`) and segment length in meters (`length_m`).
+- Added a map legend explaining the three grade categories:
+  - Green: Under 3% — Gentle
+  - Yellow: 3–6% — Moderate
+  - Red: 6%+ — Steeper
+- Preserved existing dynamic street styling and automatic map zoom.
+- Tested the updated map successfully using a local Python HTTP server.
+
+### Technical Notes
+- Grade calculations currently use start and end elevations from QGIS.
+- Grade colors use the absolute value of the calculated grade.
+- The current dataset contains 21 street segments.
+- The legend categories are prototype classifications, not official cycling safety ratings.
+
+### Next Steps
+- Inspect the complete Redmond Centerline dataset.
+- Verify citywide DEM coverage and coordinate systems.
+- Develop an automated workflow to sample elevations along street geometries.
+- Calculate more representative grade metrics before expanding to the full network.

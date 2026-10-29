@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Eastside Bike Routing</title>
 
-  <link
-    rel="stylesheet"
-    href="https://unpkg.com/leaflet/dist/leaflet.css"
-  >
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
 
   <style>
+    .legend {
+      background: white;
+      padding: 12px;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+      font-size: 14px;
+      line-height: 24px;
+    }
+
     #map {
       height: 100vh;
     }
@@ -32,37 +39,67 @@
       {
         attribution: "&copy; OpenStreetMap contributors"
       }
-        ).addTo(map);
-        fetch("test-lines.geojson")
-            .then(response => response.json())
-            .then(data => {
-                console.log(data.features.map(feature => feature.properties.grade_pct_2));
+    ).addTo(map);
+    fetch("test-lines.geojson")
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.features.map(feature => feature.properties.grade_pct_2));
 
-                const streets = L.geoJSON(data, {
-                    style: feature => {
-                        const grade = Math.abs(feature.properties.grade_pct_2);
+        const streets = L.geoJSON(data, {
+          style: feature => {
+            const grade = Math.abs(feature.properties.grade_pct_2);
 
-                        let color;
+            let color;
 
-                        if (grade < 3) {
-                            color = "#4CAF50";
-                        } else if (grade < 6) {
-                            color = "#FFC107";
-                        } else {
-                            color = "#E53935";
-                        }
+            if (grade < 3) {
+              color = "#4CAF50";
+            } else if (grade < 6) {
+              color = "#FFC107";
+            } else {
+              color = "#E53935";
+            }
 
-                        return {
-                            color: color,
-                            weight: 7,
-                            opacity: 0.85
-                        };
-                    }
-                }).addTo(map);
+            return {
+              color: color,
+              weight: 7,
+              opacity: 0.85
+            };
+          },
 
-                map.fitBounds(streets.getBounds());
-            });
-    </script>
+          onEachFeature: (feature, layer) => {
+            const grade = feature.properties.grade_pct_2;
+            const length = feature.properties.length_m;
+
+            const popupContent = `
+            <strong>Street Segment</strong>
+            <p>Grade: ${Number(grade).toFixed(2)}%</p>
+            <p>Length: ${Number(length).toFixed(1)} meters</p>
+        `;
+
+            layer.bindPopup(popupContent);
+          }
+        }).addTo(map);
+
+        map.fitBounds(streets.getBounds());
+      });
+    const legend = L.control({ position: "bottomright" });
+
+    legend.onAdd = function () {
+      const div = L.DomUtil.create("div", "legend");
+
+      div.innerHTML = `
+        <strong>Street Grade</strong>
+        <div><span style="color: #4CAF50;">■</span> Under 3% — Gentle</div>
+        <div><span style="color: #FFC107;">■</span> 3–6% — Moderate</div>
+        <div><span style="color: #E53935;">■</span> 6%+ — Steeper</div>
+    `;
+
+      return div;
+    };
+
+    legend.addTo(map);
+  </script>
 
 </body>
+
 </html>
