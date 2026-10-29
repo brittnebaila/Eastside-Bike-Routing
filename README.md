@@ -54,8 +54,14 @@ Early spatial analysis on Redmond's bicycle network, built from municipal open d
 - Build a routable bicycle network
 - Compare routes using cyclist-relevant costs
 
-## Project Goal
+### The Vision: Explore Your City
 
-The long-term goal is an interactive route-comparison prototype that helps cyclists understand **why one route may be a better fit for them than another**.
+What if planning a family bike ride felt more like exploring a beautiful video game than navigating a traditional map?
 
-Rather than simply finding the shortest route, the project explores how spatial data can support routing decisions based on terrain, infrastructure, surface conditions, and rider preferences.
+Eastside Bike Routing is evolving into an interactive, storybook-inspired 3D cycling map that helps families discover their city. Using real geographic and elevation data, the experience will bring hills, trails, neighborhoods, and local destinations to life through playful cartography.
+
+Families will eventually be able to explore routes based on distance, elevation, and bicycle infrastructure while discovering interesting stops along the way—from parks and playgrounds to public art, scenic viewpoints, and neighborhood cafés.
+
+**The goal is to make cycling more approachable, exploration more rewarding, and geographic information more meaningful for everyday people.**
+
+*Current development:* Building and validating the GIS data pipeline, street-grade analysis, and interactive Leaflet prototype. The illustrated 3D experience and destination discovery features are planned for future development.
